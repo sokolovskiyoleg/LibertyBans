@@ -41,22 +41,22 @@
 all:
   prefix:
     # Префикс, который будет использоваться
-    value: '&6&lLibertyBans &8»&7 '
+    value: '&c&lНаказания &8»&7 '
     # Если включено, ко всем сообщениям будет добавляться префикс
     enable: true
     # Сообщение, если игрок вводит /libertybans без права 'libertybans.commands'
   base-permission-message: '&cУ вас нет прав для использования этой команды.'
-  usage: '&cНеизвестная подкоманда. Использование:'
+  usage: '&cНеизвестная подкоманда. &7Использование:'
   # Сообщения об ошибке, когда игрок/IP не найден
   not-found:
-    player-or-address: '&c&o%TARGET%&7 никнейм/IP не найден.'
-    uuid: '&c&o%TARGET%&7 - неправильный UUID.'
-    player: '&c&o%TARGET%&7 не найден ни онлайн, ни оффлайн.'
+    player-or-address: '&c%TARGET%&7 никнейм/IP не найден.'
+    uuid: '&c%TARGET%&7 - неправильный UUID.'
+    player: '&c%TARGET%&7 не найден ни онлайн, ни оффлайн.'
     # Раздел актуален только если включена система scopes
 scopes:
   no-permission-for-default: '&cВы не можете использовать эту команду без указания области (scope).'
-  invalid: '&cУказана неверная область: &e%SCOPE_ARG%&c.'
-  no-permission: '&cУ вас нет прав использовать область &e%SCOPE%&c.'
+  invalid: '&cУказана неверная область: &e%SCOPE_ARG%&7.'
+  no-permission: '&cУ вас нет прав использовать область &e%SCOPE%&7.'
   # Настройка команды /accounthistory
 account-history:
   # Команда /accounthistory delete <user> <timestamp>
@@ -65,7 +65,7 @@ account-history:
     no-such-account: '&cУ %TARGET% нет истории в указанное время.'
     success: '&7История аккаунта &e%TARGET%&7 успешно удалена.'
     usage:
-      - '&cИспользование: /accounthistory delete <игрок> <timestamp>.&f'
+      - '&7Использование: &a/accounthistory delete &8(&aник&8) <timestamp>.&f'
       - '&7Timestamp указывается в unix-секундах (обычно берётся из
         /accounthistory list)'
       # Команда /accounthistory list
@@ -81,7 +81,7 @@ account-history:
       # %NEXTPAGE_KEY% - код для перехода на следующую страницу
       # %LASTPAGE% - последняя страница
       # %LASTPAGE_KEY% - код для перехода на последнюю страницу
-    header: '&7Известные аккаунты игрока &c&o%TARGET%&7:'
+    header: '&7Известные аккаунты игрока &c%TARGET%&7:'
     none-found: '&7Страница не существует.'
     # Количество аккаунтов на одной странице
     per-page: 10
@@ -98,9 +98,10 @@ account-history:
     # Доступные переменные — те же, что и для заголовка.
     footer: '&7<Следующая страница>||ttp:Нажмите, чтобы перейти на следующую
       страницу||cmd:/libertybans accounthistory %TARGET% %NEXTPAGE_KEY%'
-    usage: '&cИспользование: /accounthistory list <никнейм|ip> [страница]'
+    usage: '&7Использование: &a/accounthistory list &8(&aник&8 | &aайпи&8)
+      &8(&aстраница&8)'
 
-  usage: '&cИспользование: /accounthistory <delete|list>'
+  usage: '&7Использование: &a/accounthistory &8(&adelete&8 | &alist&8)'
   # Сообщения для проверки мультиаккаунтов и уведомлений о них
   #
   # Перед настройкой этого раздела рекомендуется ознакомиться с настройками
@@ -122,9 +123,9 @@ alts:
       # %LASTPAGE% - последняя страница
       # %LASTPAGE_KEY% - код для перехода на последнюю страницу
     header:
-      - '&7Отчёт по мультиаккаунтам &c&o%TARGET%&7.&f'
-      - '&7Большая вероятность - тот же IP-адрес, что у забаненного игрока.&f'
-      - '&7Малая вероятность - общий прошлый IP-адрес.'
+      - '&7Мультиаккаунты &a%TARGET%&7.&f'
+      - '&c↑ &7- IP забаненного игрока.&f'
+      - '&a↓ &7- общий IP.'
     none-found: '&7Страница не существует.'
     # Количество мультиаккаунтов на одной странице
     per-page: 10
@@ -132,9 +133,9 @@ alts:
     oldest-first: true
     # Формат нижнего колонтитула. Отправляется после каждой страницы.
     # Доступные переменные — те же, что и для заголовка.
-    footer: '&7<Следующая страница>||ttp:Нажмите, чтобы перейти на следующую
+    footer: '&8<&aследующая страница →&8>||ttp:Нажмите, чтобы перейти на следующую
       страницу||cmd:/libertybans alts %TARGET% %NEXTPAGE_KEY%'
-    usage: '&cИспользование: /alts &e<никнейм> [страница]&c.'
+    usage: '&7Использование: &a/alts &8(&aник&8) &8(&aстраница&8)&7.'
 
   auto-show:
     # После такого количества мультиаккаунтов их перестанут показывать.
@@ -143,7 +144,7 @@ alts:
     separator: ', '
     # Сообщение, которое отображается в начале проверки. Оставьте пустую строку, чтобы отключить.
     header:
-      - '&c&o%TARGET%&7 возможно является мультиаккаунтом. Ниже перечислены
+      - '&c%TARGET%&7 возможно является мультиаккаунтом. Ниже перечислены
         связанные аккаунты.&f'
       - '&7Большая вероятность - тот же IP-адрес.&f'
       - 'Малая вероятность - общий прошлый IP-адрес.'
@@ -155,16 +156,16 @@ alts:
 
   formatting:
     # Описание мультиаккаунта, обнаруженного строгим методом.
-    strict: '&eБольшая вероятность'
+    strict: '&c↑'
     # Описание мультиаккаунта, обнаруженного обычным методом.
-    normal: '&cМалая вероятность'
+    normal: '&a↓'
     # В отображении мультиаккаунтов никнейм может форматироваться в зависимости от того, забанен ли аккаунт.
     # Например, забаненные мультиаккаунты могут быть красными, а незабаненные — зелёными.
     # Переменные: %USERNAME%
     name-display:
-      not-punished: '&o%USERNAME%'
-      muted: '&e&o%USERNAME%'
-      banned: '&c&o%USERNAME%'
+      not-punished: '&a%USERNAME%'
+      muted: '&c&o%USERNAME%'
+      banned: '&c%USERNAME%'
       # Как должна отображаться одна запись обнаруженного мультиаккаунта
       # В дополнение к переменным header/footer доступны:
       # %DETECTION_KIND% - тип обнаружения (будет заменён на normal или strict).
@@ -172,28 +173,28 @@ alts:
       # %RELEVANT_USER% - никнейм связанного аккаунта (отформатированный согласно name-display)
       # %RELEVANT_USERID% - UUID связанного аккаунта
       # %DATE_RECORDED% - дата записи обнаружения
-    layout: '%RELEVANT_USER% &7(%ADDRESS%) %DATE_RECORDED% - %DETECTION_KIND%'
+    layout: ' %RELEVANT_USER% &8(&7%ADDRESS%&8)&7 %DATE_RECORDED% - %DETECTION_KIND%'
 
 # Используется для /banlist, /mutelist, /history, /warns, /blame
 lists:
   history:
     perPage: 10
-    noPages: 'У &c&o%TARGET%&7 нет наказаний.'
+    noPages: '&7У &c%TARGET%&7 нет наказаний.'
     maxPages: '&7Страница &e%PAGE%&7 не существует.'
     permission:
       command: '&7У вас нет прав просматривать историю.'
 
     layout:
       header:
-        - '&7[&eID&7] &8/ &7Тип наказания&f'
-        - '&7Администратор &8/ &7Причина &8/ &7Дата выдачи&f'
+        - '&aID &8| &aАдмин &8| &aТип &8| &aПричина &8| &aДата выдачи'
+        - '&r'
       body:
-        - '&7[&e%ID%&7] / %TYPE%&f'
-        - '&7%OPERATOR% &8/ &7%REASON% &8/ &7%START_DATE%&f'
+        - '&8[&f%ID%&8] &8| &8[&e%OPERATOR%&8] &8| &8[&c%TYPE%&8]'
+        - ' &a↘ &7Причина: &7%REASON% &8| &7Дата: %START_DATE%'
       footer: '&7Страница &e%PAGE%&7.||ttp:Нажмите, чтобы перейти на следующую
         страницу||cmd:/libertybans history %TARGET% %NEXTPAGE_KEY%'
 
-    usage: '&cИспользование: /history &e<никнейм> [страница]'
+    usage: '&7Использование: &a/history &8(&aник&8) &8(&aстраница&8)'
 
   ban-list:
     perPage: 10
@@ -204,15 +205,17 @@ lists:
 
     layout:
       header:
-        - '&7[&eID&7] &e&oНарушитель&f'
-        - '&7Администратор &8/ &7Причина &8/ &7Оставшееся время&f'
+        - '&aID &8| &aНарушитель &8| &aАдмин'
+        - ' &a↘ &aПричина &8| &aОставшееся время'
+        - '&r'
       body:
-        - '&7[&e%ID%&7] &e&o%VICTIM%&f'
-        - '&7%OPERATOR% &8/ &7%REASON% &8/ &7%TIME_REMAINING%&f'
+        - '&8[&f%ID%&8] &8| &8[&c%VICTIM%&8] &8| &8[&e%OPERATOR%&8]&f'
+        - ' &a↘ &7Причина: &7%REASON% &8| &7Оставшееся время:
+          &7%TIME_REMAINING%&f'
       footer: '&7Страница &e%PAGE%&7.||ttp:Нажмите, чтобы перейти на следующую
         страницу||cmd:/libertybans banlist %NEXTPAGE_KEY%'
 
-    usage: '&cИспользование: /banlist &e[страница]'
+    usage: '&7Использование: &a/banlist &8(&aстраница&8)'
 
   mute-list:
     perPage: 10
@@ -223,38 +226,40 @@ lists:
 
     layout:
       header:
-        - '&7[&eID&7] &e&oНарушитель&f'
-        - '&7Администратор &8/ &7Причина &8/ &7Оставшееся время&f'
+        - '&aID &8| &aНарушитель &8| &aАдмин'
+        - ' &a↘ &aПричина &8| &aОставшееся время'
+        - '&r'
       body:
-        - '&7[&e%ID%&7] &e&o%VICTIM%&f'
-        - '&7%OPERATOR% &8/ &7%REASON% &8/ &7%TIME_REMAINING%&f'
+        - '&8[&f%ID%&8] &8| &8[&c%VICTIM%&8] &8| &8[&e%OPERATOR%&8]&f'
+        - ' &a↘ &7Причина: &7%REASON% &8| &7Оставшееся время:
+          &7%TIME_REMAINING%&f'
       footer: '&7Страница &e%PAGE%&7.||ttp:Нажмите, чтобы перейти на следующую
         страницу||cmd:/libertybans banlist %NEXTPAGE_KEY%'
 
-    usage: '&cИспользование: /mutelist &e[страница]'
+    usage: '&7Использование: &a/mutelist &8(&aстраница&8)'
 
   blame:
     perPage: 10
-    noPages: '&c&o%TARGET%&7 не наказывал других игроков.'
+    noPages: '&c%TARGET%&7 не наказывал других игроков.'
     maxPages: '&7Страница &e%PAGE%&7 не существует.'
     permission:
       command: '&7У вас нет прав использовать команду blame.'
 
     layout:
       header:
-        - '&7[&eID&7] &e&oНарушитель &8/ &7Тип наказания&f'
-        - '&7Причина &8/ &7Дата выдачи&f'
+        - '&aID &8| &aАдмин &8| &aТип &8| &aПричина &8| &aДата выдачи'
+        - '&r'
       body:
-        - '&7[&e%ID%&7] &e&o%VICTIM% &8 / &7%TYPE%&f'
-        - '&7%REASON% &8/ &7%START_DATE%&f'
+        - '&8[&f%ID%&8] &8| &8[&e%OPERATOR%&8] &8| &8[&c%TYPE%&8]'
+        - ' &a↘ &7Причина: &7%REASON% &8| &7Дата: %START_DATE%'
       footer: '&7Страница &e%PAGE%&7.||ttp:Нажмите, чтобы перейти на следующую
         страницу||cmd:/libertybans blame %TARGET% %NEXTPAGE_KEY%'
 
-    usage: '&cИспользование: /blame &e<никнейм> [страница]'
+    usage: '&7Использование: &a/blame &8(&aник&8) &8(&aстраница&8)'
 
   warns:
     perPage: 10
-    noPages: '&c&o%TARGET%&7 не имеет предупреждений.'
+    noPages: '&c%TARGET%&7 не имеет предупреждений.'
     maxPages: '&7Страница &e%PAGE%&7 не существует.'
     permission:
       command: '&7У вас нет прав просматривать предупреждения.'
@@ -265,8 +270,7 @@ lists:
       footer: '&7Страница &e%PAGE%&7.||ttp:Нажмите, чтобы перейти на следующую
         страницу||cmd:/libertybans warns %TARGET% %NEXTPAGE_KEY%'
 
-    usage: '&cИспользование: /warns &e<никнейм> [страница]'
-
+    usage: '&7Использование: &a/warns &8(&aник&8) &8(&aстраница&8)'
 
 misc:
   # Касается форматирования относительных значений времени и кулдаунов
@@ -283,11 +287,11 @@ misc:
     fallback-seconds: '%VALUE% секунд'
     fragments:
       YEARS: '%VALUE% лет'
-      DAYS: '%VALUE% дней'
-      MONTHS: '%VALUE% месяцев'
-      HOURS: '%VALUE% часов'
-      WEEKS: '%VALUE% недель'
-      MINUTES: '%VALUE% минут'
+      DAYS: '%VALUE% дн.'
+      MONTHS: '%VALUE% мес.'
+      HOURS: '%VALUE% ч.'
+      WEEKS: '%VALUE% нед.'
+      MINUTES: '%VALUE% мин.'
 
   unknown-error: '&cПроизошла неизвестная ошибка.'
   # Применяется только если в основном конфиге стратегия синхронного применения (enforcement) установлена на DENY
@@ -296,24 +300,24 @@ misc:
 removals:
   mutes:
     success:
-      message: '&7С игрока &c&o%VICTIM%&7 снят мут.'
-      notification: '&c&o%UNOPERATOR%&7 снял мут с игрока &c&o%VICTIM%&7.'
+      message: '&7С игрока &c%VICTIM%&7 снят мут.'
+      notification: '&a%UNOPERATOR%&7 снял мут с игрока &c%VICTIM%&7.'
 
-    usage: '&cИспользование: /unmute &e<игрок>&c.'
-    not-found: '&c&o%TARGET%&7 не в муте.'
+    usage: '&7Использование: &a/unmute &8(&aник&8)&7.'
+    not-found: '&c%TARGET%&7 не в муте.'
     permission:
       ip-address: '&cНельзя снять мут с IP-адреса.'
       uuid: '&cНельзя снять мут с UUID.'
       both: '&cНельзя одновременно снять мут и с игрока, и с его IP-адреса.'
 
   warns:
-    not-a-number: '&c&o%ID_ARG%&7 не является числом.'
+    not-a-number: '&c%ID_ARG%&7 не является числом.'
     success:
-      message: '&7С игрока &c&o%VICTIM%&7 снято предупреждение.'
-      notification: '&c&o%UNOPERATOR%&7 снял предупреждение с игрока &c&o%VICTIM%&7.'
+      message: '&7С игрока &c%VICTIM%&7 снято предупреждение.'
+      notification: '&c%UNOPERATOR%&7 снял предупреждение с игрока &c%VICTIM%&7.'
 
-    usage: '&Использование: /unwarn &e<никнейм> <ID>&c.'
-    not-found: '&c&o%TARGET%&7 не имеет предупреждения с ID &c&o%ID%&7.'
+    usage: '&&7Использование: &a/unwarn &8(&aник&8) <ID>&7.'
+    not-found: '&c%TARGET%&7 не имеет предупреждения с ID &c%ID%&7.'
     permission:
       ip-address: '&cНельзя снять предупреждение с IP-адреса.'
       uuid: '&cНельзя снять предупреждение с UUID.'
@@ -322,11 +326,11 @@ removals:
 
   bans:
     success:
-      message: '&7С игрока &c&o%VICTIM%&7 снят бан.'
-      notification: '&c&o%UNOPERATOR%&7 снял бан с игрока &c&o%VICTIM%&7.'
+      message: '&7С игрока &c%VICTIM%&7 снят бан.'
+      notification: '&c%UNOPERATOR%&7 снял бан с игрока &c%VICTIM%&7.'
 
-    usage: '&cИспользование: /unban &e<никнейм>&c.'
-    not-found: '&c&o%TARGET%&7 не забанен.'
+    usage: '&7Использование: &a/unban &8(&aник&8)&7.'
+    not-found: '&c%TARGET%&7 не забанен.'
     permission:
       ip-address: '&cНельзя снять бан с IP-адреса.'
       uuid: '&cНельзя снять бан с UUID.'
@@ -338,96 +342,95 @@ removals:
   #
 additions:
   mutes:
-    conflicting: '&c&o%TARGET%&7 уже находится в муте.'
-    exempted: '&c&o%TARGET%&7 нельзя замутить.'
+    conflicting: '&c%TARGET%&7 уже находится в муте.'
+    exempted: '&c%TARGET%&7 нельзя замутить.'
     success:
-      message: '&aВыдан мут игроку &c&o%VICTIM%&a на &o%DURATION%&r&a по причине
-        &e&o%REASON%&a.'
-      notification: '&c&o%OPERATOR%&7 выдал мут игроку &c&o%VICTIM%&7 на
-        &a&o%DURATION%&7 по причине &e&o%REASON%&7.%SILENCE%'
+      message: '&7Вы выдали мут игроку &c%VICTIM%&7 на &a%DURATION%&r&7 по причине:
+        &e%REASON%&7.'
+      notification: '&c%OPERATOR%&7 выдал мут игроку &c%VICTIM%&7 на &a%DURATION%&7 по
+        причине &e%REASON%&7.'
 
     layout:
-      - '&7&lМут&f'
-      - '&cОсталось: &e%TIME_REMAINING%&f'
+      - '&c&lВнимание! &cВас замутили!'
+      - '&7Вы не можете писать в чат.'
+      - '&7Истекает через: &e%TIME_REMAINING%&f'
       - ''
-      - '&c&lПричина&f'
-      - '&7%REASON%'
-    usage: '&cИспользование: /mute &e<игрок> [время] <причина>&c.'
+      - '&c&lПричина&7: &7%REASON%'
+    usage: '&7Использование: &a/mute &8(&aник&8) &8(&aвремя&8) &8(&aпричина&8)&7.'
     permission:
-      duration: '&cВы не можете выдать мут на &e%DURATION%&c.'
+      duration: '&cВы не можете выдать мут на &e%DURATION%&7.'
       ip-address: '&cНельзя применять это к IP-адресам.'
       uuid: '&cНельзя применять это к игрокам.'
       both: '&cНельзя применять это к игрокам и их IP-адресам.'
 
   kicks:
-    must-be-online: '&c&o%TARGET%&7 должен быть онлайн.'
-    exempted: '&c&o%TARGET%&7 нельзя кикнуть.'
+    must-be-online: '&c%TARGET%&7 должен быть онлайн.'
+    exempted: '&c%TARGET%&7 нельзя кикнуть.'
     success:
-      message: '&aИгрок &c&o%VICTIM%&a кикнут по причине &e&o%REASON%&a.'
-      notification: '&c&o%OPERATOR%&7 кикнул игрока &c&o%VICTIM%&7 по причине
-        &e&o%REASON%&7.'
+      message: '&7Игрок &c%VICTIM%&7 кикнут по причине: &e%REASON%&7.'
+      notification: '&c%OPERATOR%&7 кикнул игрока &c%VICTIM%&7 по причине: &e%REASON%&7.'
 
     layout:
-      - '&7&lКик&f'
+      - '&c&lВнимание! Вас кикнули с сервера!'
       - ''
-      - '&c&lПричина&f'
-      - '&7%REASON%'
-    usage: '&cИспользование: /kick &e<игрок> <причина>&c.'
+      - '&c&lПричина&7: &7%REASON%'
+    usage: '&7Использование: &a/kick &8(&aник&8) &8(&aпричина&8)&7.'
     permission:
       ip-address: '&cНельзя применять это к IP-адресам.'
       uuid: '&cНельзя применять это к игрокам.'
       both: '&cНельзя применять это к игрокам и их IP-адресам.'
 
   warns:
-    exempted: '&c&o%TARGET%&7 нельзя выдать предупреждение.'
+    exempted: '&c%TARGET%&7 нельзя выдать предупреждение.'
     success:
-      message: '&aВыдано предупреждение игроку &c&o%VICTIM%&a на &o%DURATION%&r&a по
-        причине &e&o%REASON%&a.'
-      notification: '&c&o%OPERATOR%&7 выдал предупреждение игроку &c&o%VICTIM%&7 на
-        &a&o%DURATION%&7 по причине &e&o%REASON%&7.'
+      message: '&7Выдано предупреждение игроку &c%VICTIM%&7 на %DURATION%&r&7 по
+        причине &e%REASON%&7.'
+      notification: '&c%OPERATOR%&7 выдал предупреждение игроку &c%VICTIM%&7 на
+        &a%DURATION%&7 по причине: &e%REASON%&7.'
 
     layout:
-      - '&7&lПредупреждение&f'
-      - '&cОсталось: &e%TIME_REMAINING%&f'
+      - '&c&lВнимание! &cВам выдали предупреждение!'
+      - '&7Истекает через: &e%TIME_REMAINING%&f'
       - ''
-      - '&c&lПричина&f'
-      - '&7%REASON%'
-    usage: '&cИспользование: /warn &e<игрок> [время] <причина>&c.'
+      - '&c&lПричина&7: &7%REASON%'
+    usage: '&7Использование: &a/warn &8(&aник&8) &8(&aвремя&8) &8(&aпричина&8)&7.'
     permission:
-      duration: '&cВы не можете выдать предупреждение на &e%DURATION%&c.'
+      duration: '&cВы не можете выдать предупреждение на &e%DURATION%&7.'
       ip-address: '&cНельзя применять это к IP-адресам.'
       uuid: '&cНельзя применять это к игрокам.'
       both: '&cНельзя применять это к игрокам и их IP-адресам.'
 
   bans:
-    conflicting: '&c&o%TARGET%&7 уже забанен.'
-    exempted: '&c&o%TARGET%&7 нельзя забанить.'
+    conflicting: '&c%TARGET%&7 уже забанен.'
+    exempted: '&c%TARGET%&7 нельзя забанить.'
     success:
-      message: '&aИгрок &c&o%VICTIM%&a забанен на &o%DURATION%&r&a по причине
-        &e&o%REASON%&a.'
-      notification: '&c&o%OPERATOR%&7 забанил игрока &c&o%VICTIM%&7 на
-        &a&o%DURATION%&7 по причине &e&o%REASON%&7.'
+      message: '&7Игрок &c%VICTIM%&7 забанен на %DURATION%&r&7 по причине:
+        &e%REASON%&a.'
+      notification: '&c%OPERATOR%&7 забанил игрока &c%VICTIM%&7 на &a%DURATION%&7 по
+        причине &e%REASON%&7.'
 
     layout:
-      - '&7&lБан&f'
-      - '&cОсталось: &e%TIME_REMAINING%&f'
       - ''
-      - '&c&lПричина&f'
-      - '&7%REASON%&f'
+      - '&7Вы забанены на сервере &cWestShield&r'
       - ''
-      - '&3&lОбжаловать наказание&f'
-      - '&cСайт: &7website&f'
-      - '&cDiscord: &7discord'
-    usage: '&cИспользование: /ban &e<игрок> [время] <причина>&c.'
+      - '&7Ваш ник: &c%VICTIM%'
+      - '&7Забанил администратор: &a%OPERATOR%'
+      - ''
+      - '&7Оставшееся время: &e%TIME_REMAINING%&f'
+      - '&7Причина: &e%REASON%'
+      - ''
+      - '&7Обжаловать наказание можно в'
+      - '&dDiscord: &7https://discord.gg/JF9jS43Q8r'
+    usage: '&7Использование: &a/ban &8(&aник&8) &8(&aвремя&8) &8(&aпричина&8)&7.'
     permission:
-      duration: '&cВы не можете выдать бан на &e%DURATION%&c.'
+      duration: '&cВы не можете выдать бан на &e%DURATION%&7.'
       ip-address: '&cНельзя применять это к IP-адресам.'
       uuid: '&cНельзя применять это к игрокам.'
       both: '&cНельзя применять это к игрокам и их IP-адресам.'
 
 admin:
-  ellipses: '&a...'
-  reloaded: '&aКонфигурация перезагружена'
+  ellipses: '&aПерезагрузка конфигураций плагина...'
+  reloaded: '&aКонфигурации плагина перезагружены'
   reload-failed: '&cПроизошла ошибка при перезагрузке конфигурации. Проверьте
     консоль сервера.'
   restarted: '&aПерезапущено'
@@ -437,14 +440,14 @@ admin:
       success: '&aДополнение &e%ADDON%&a перезагружено.'
       failed: '&cПроизошла ошибка при перезагрузке конфигурации дополнения. Проверьте
         консоль сервера.'
-      usage: '&cИспользование: /libertybans addon reload <дополнение>. Чтобы
+      usage: '&7Использование: &a/libertybans addon reload <дополнение>. Чтобы
         перезагрузить все дополнения сразу, используйте /libertybans reload.'
 
     listing:
       message: '&b&lУстановленные дополнения'
       layout: '&7- %ADDON%'
 
-    usage: '&cИспользование: /libertybans addon <install|list|reload>'
+    usage: '&7Использование: &a/libertybans addon <install|list|reload>'
     install:
       installed: '&aДополнение &e%ADDON%&a установлено. Оно загрузится после
         следующего перезапуска сервера.'
@@ -453,13 +456,14 @@ admin:
         дополнение, установите jar-файл напрямую в plugins/LibertyBans/addons.'
       already-installed: '&aДополнение &e%ADDON%&a уже установлено или находится в
         файловой системе.'
-      usage: '&cИспользование: /libertybans addon install <дополнение>'
+      usage: '&7Использование: &a/libertybans addon install <дополнение>'
 
   no-permission: '&cИзвините, у вас нет доступа к этой команде.'
   importing:
     started: '&7Импорт начат. Подробности и прогресс смотрите в консоли сервера.'
     complete: '&7Импорт завершён.'
-    usage: '&cИспользование: /libertybans import <advancedban|litebans|vanilla|self>'
+    usage: '&7Использование: &a/libertybans import
+      <advancedban|litebans|vanilla|self>'
     # Чтобы избежать ошибок, запускать несколько импортов одновременно запрещено.
     in-progress: '&cИмпорт уже выполняется.'
     failure: '&cИмпорт не удался. Подробности смотрите в консоли сервера.'
@@ -490,11 +494,11 @@ formatting:
     # Как отображать "перманентность" в качестве длительности?
   permanent-display:
     # Как называть перманентную длительность?
-    duration: 'Бесконечно'
+    duration: '∞'
     # Когда заканчивается перманентное наказание?
     absolute: 'Никогда'
     # Как описать оставшееся время у перманентного наказания?
-    relative: 'Навсегда'
+    relative: '∞'
     # Как отображать глобальную область действия (все сервера)?
   global-scope-display: 'Все сервера'
   # Управляет отображением информации о нарушителях
@@ -509,7 +513,7 @@ formatting:
     censored-ip-address: '<IP-адрес скрыт>'
     # При использовании /blame, как обозначать консоль?
   console-arguments:
-    - 'console'
+    - 'Console'
     # Большинству пользователей эта секция не понадобится. Она в основном для "красоты".
     # Если хотите изменить, как отображаются и обрабатываются ID, настройте это здесь.
   id-display:
@@ -567,4 +571,4 @@ formatting:
     # Посмотрите на сообщение о муте (mute) для примера использования этой переменной.
   silence:
     not-silent: []
-    silent: '&7 [&f&oТихо&7]'
+    silent: '&7 [&fТихо&7]'
