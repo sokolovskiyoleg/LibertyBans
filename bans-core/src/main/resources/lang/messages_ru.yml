@@ -190,6 +190,7 @@ additions:
       message: '&c&o%VICTIM%&a заблокирован на &o%DURATION%&r&a по причине &e&o%REASON%&a.'
 
     usage: '&cИспользование: /ban &e<игрок> [длительность] <причина>&c.'
+    tempban-usage: '&cИспользование: /tempban &e<игрок> <длительность> <причина>&c.'
     layout:
       - '&7&lВы заблокированы на этом сервере.&f'
       - '&cДлительность бана: &e%TIME_REMAINING%&f'
@@ -213,6 +214,7 @@ additions:
       message: '&c&o%VICTIM%&a заглушён на &o%DURATION%&r&a по причине &e&o%REASON%&a.'
 
     usage: '&cИспользование: /mute &e<игрок> [длительность] <причина>&c.'
+    tempmute-usage: '&cИспользование: /tempmute &e<игрок> <длительность> <причина>&c.'
     layout:
       - '&7&lВы получили мут!&f'
       - '&cДлительность: &e%TIME_REMAINING%&f'
@@ -435,4 +437,3 @@ account-history:
     layout: '%USERNAME% &7(%ADDRESS%) на %DATE_RECORDED% (%DATE_RECORDED_RAW%)||ttp:&7Нажми здесь, чтобы удалить аккаунт||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%'
 
   usage: '&cИспользование: /accounthistory <delete|list>'
-
