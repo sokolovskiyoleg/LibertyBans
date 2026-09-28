@@ -107,8 +107,8 @@ public interface MainConfig {
 				"Also, please note that command aliases are disabled on Sponge, due to command API differences."
 		})
 		@DefaultStrings({
-			"ban", "ipban", "ban-ip:ipban",
-		    "mute", "ipmute",
+			"ban", "tempban", "ipban", "ban-ip:ipban",
+		    "mute", "tempmute", "ipmute",
 		    "warn", "ipwarn",
 		    "kick", "ipkick",
 		    "unban", "unbanip",
