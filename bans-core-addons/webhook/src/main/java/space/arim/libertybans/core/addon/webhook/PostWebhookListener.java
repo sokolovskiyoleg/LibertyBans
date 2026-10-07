@@ -28,7 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.arim.api.jsonchat.adventure.util.Adventure5Compat;
 import space.arim.api.jsonchat.adventure.util.ComponentText;
+import space.arim.libertybans.api.CompositeVictim;
 import space.arim.libertybans.api.Operator;
+import space.arim.libertybans.api.PlayerVictim;
+import space.arim.libertybans.api.Victim;
 import space.arim.libertybans.api.event.PostOpNotificationEvent;
 import space.arim.libertybans.api.event.PostPardonEvent;
 import space.arim.libertybans.api.event.PostPunishEvent;
@@ -38,6 +41,7 @@ import space.arim.libertybans.core.service.FuturePoster;
 import space.arim.omnibus.events.ListenerPriorities;
 import space.arim.omnibus.events.ListeningMethod;
 import space.arim.omnibus.util.ThisClass;
+import space.arim.omnibus.util.concurrent.CentralisedFuture;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -96,6 +100,26 @@ public final class PostWebhookListener {
             String target = event.getTarget().orElse(null);
             jsonPayload = jsonPayload.replace("%TARGET%", target == null ? "<none>" : target);
         }
+        // Resolve victim display (nickname) up-front so %VICTIM_NAME% works even when
+        // %VICTIM% is just an IP (e.g. an AddressVictim with no associated name).
+        String victimName = null;
+        {
+            Victim victim = event.getPunishment().getVictim();
+            CentralisedFuture<String> victimNameFuture;
+            if (victim instanceof PlayerVictim playerVictim) {
+                victimNameFuture = formatter.formatVictim(playerVictim);
+            } else if (victim instanceof CompositeVictim compositeVictim) {
+                // LOOKUP is a complete future every time we call this ourselves,
+                // because of UUIDManager's fastCache.
+                victimNameFuture = formatter.formatVictim(compositeVictim);
+            } else {
+                victimNameFuture = null;
+            }
+            if (victimNameFuture != null) {
+                victimName = victimNameFuture.join();
+            }
+        }
+        jsonPayload = jsonPayload.replace("%VICTIM_NAME%", victimName == null ? "" : victimName);
         ComponentText formattable = ComponentText.create(Component.text(jsonPayload), adventure5Compat);
         CompletableFuture<Component> formatted;
         {

@@ -88,7 +88,7 @@ public interface WebhookConfig extends AddonConfig {
                 "Examples and guide:",
                 "https://gist.github.com/Birdie0/78ee79402a4301b1faf412ab5f1cdcf9#example-for-a-webhook"
         })
-        @ConfDefault.DefaultString("{\"content\":\"BAM! %VICTIM% has been punished with %TYPE%.\\n\\nThere's more info below, but you don't have to read it. This punishment will last for %DURATION%\\n_ _\",\"embeds\":[{\"title\":\"Punishment reason\",\"description\":\"%REASON%\",\"color\":5814783,\"fields\":[{\"name\":\"Operator\",\"value\":\"By %OPERATOR%\"},{\"name\":\"Scope\",\"value\":\"%SCOPE%\"}],\"author\":{\"name\":\"LibertyBans\"}}]}")
+        @ConfDefault.DefaultString("{\"content\":\"BAM! %VICTIM_NAME% (%VICTIM%) has been punished with %TYPE%.\\n\\nThere's more info below, but you don't have to read it. This punishment will last for %DURATION%\\n_ _\",\"embeds\":[{\"title\":\"Punishment reason\",\"description\":\"%REASON%\",\"color\":5814783,\"fields\":[{\"name\":\"Operator\",\"value\":\"By %OPERATOR%\"},{\"name\":\"Scope\",\"value\":\"%SCOPE%\"}],\"author\":{\"name\":\"LibertyBans\"}}]}")
         String jsonPayload();
 
     }
