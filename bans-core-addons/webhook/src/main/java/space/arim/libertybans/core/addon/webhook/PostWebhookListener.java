@@ -186,8 +186,10 @@ public final class PostWebhookListener {
     private CentralisedFuture<String> lookupNameByAddress(AddressVictim addressVictim) {
         byte[] rawAddress = addressVictim.getAddress().getRawAddress();
         String ipString = addressVictim.getAddress().toString();
-        logger.info("webhook: resolving victim name for IP {} ({} bytes)",
-                ipString, rawAddress.length);
+        // Diagnostic: print to System.err so we are guaranteed to see this in latest.log
+        // even if the SLF4J binding suppresses INFO from this module.
+        System.err.println("[webhook] resolving victim name for IP " + ipString
+                + " (" + rawAddress.length + " bytes)");
         String name = null;
         try (Connection conn = databaseManager.getInternal().getConnection();
              PreparedStatement ps = conn.prepareStatement(
@@ -202,15 +204,11 @@ public final class PostWebhookListener {
                 }
             }
         } catch (SQLException ex) {
-            logger.error("webhook: failed to resolve player name by IP {}", ipString, ex);
+            System.err.println("[webhook] primary lookup failed for IP " + ipString);
+            ex.printStackTrace();
             return futuresFactory.completedFuture(null);
         }
         if (name == null) {
-            // Fallback: search the entire addresses table for any 4-byte IPv4 prefix
-            // (MySQL/MariaDB VARBINARY compares fixed-length, so a length mismatch
-            // between the bind value and the stored value would silently miss).
-            // We do a best-effort match using HEX equality, which works regardless
-            // of how the address was originally stored.
             try (Connection conn = databaseManager.getInternal().getConnection();
                  PreparedStatement ps = conn.prepareStatement(
                                  "SELECT n.name FROM libertybans_addresses a " +
@@ -224,11 +222,12 @@ public final class PostWebhookListener {
                     }
                 }
             } catch (SQLException ex) {
-                logger.error("webhook: HEX fallback failed for IP {}", ipString, ex);
+                System.err.println("[webhook] HEX fallback failed for IP " + ipString);
+                ex.printStackTrace();
             }
         }
-        logger.info("webhook: resolved victim name for IP {} -> {}",
-                ipString, name == null ? "<not found>" : name);
+        System.err.println("[webhook] resolved victim name for IP " + ipString
+                + " -> " + (name == null ? "<not found>" : name));
         return futuresFactory.completedFuture(name);
     }
 }
