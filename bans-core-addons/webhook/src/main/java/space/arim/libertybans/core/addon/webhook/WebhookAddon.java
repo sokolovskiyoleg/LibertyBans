@@ -41,7 +41,9 @@ public final class WebhookAddon extends AbstractAddon<WebhookConfig> {
 
 	@Override
 	public void startup() {
+		System.err.println("[webhook] WebhookAddon.startup() called");
 		omnibus.getEventBus().registerListeningMethods(listener.get());
+		System.err.println("[webhook] WebhookAddon.startup() done; listener registered");
 	}
 
 	@Override
