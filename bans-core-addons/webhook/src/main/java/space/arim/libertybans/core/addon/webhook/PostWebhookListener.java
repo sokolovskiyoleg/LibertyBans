@@ -185,7 +185,10 @@ public final class PostWebhookListener {
      */
     private CentralisedFuture<String> lookupNameByAddress(AddressVictim addressVictim) {
         byte[] rawAddress = addressVictim.getAddress().getRawAddress();
-        String name;
+        String ipString = addressVictim.getAddress().toString();
+        logger.info("webhook: resolving victim name for IP {} ({} bytes)",
+                ipString, rawAddress.length);
+        String name = null;
         try (Connection conn = databaseManager.getInternal().getConnection();
              PreparedStatement ps = conn.prepareStatement(
                              "SELECT n.name FROM libertybans_addresses a " +
@@ -196,14 +199,36 @@ public final class PostWebhookListener {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     name = rs.getString(1);
-                } else {
-                    name = null;
                 }
             }
         } catch (SQLException ex) {
-            logger.warn("Failed to resolve player name by IP for webhook", ex);
+            logger.error("webhook: failed to resolve player name by IP {}", ipString, ex);
             return futuresFactory.completedFuture(null);
         }
+        if (name == null) {
+            // Fallback: search the entire addresses table for any 4-byte IPv4 prefix
+            // (MySQL/MariaDB VARBINARY compares fixed-length, so a length mismatch
+            // between the bind value and the stored value would silently miss).
+            // We do a best-effort match using HEX equality, which works regardless
+            // of how the address was originally stored.
+            try (Connection conn = databaseManager.getInternal().getConnection();
+                 PreparedStatement ps = conn.prepareStatement(
+                                 "SELECT n.name FROM libertybans_addresses a " +
+                                 "JOIN libertybans_names n ON n.uuid = a.uuid " +
+                                 "WHERE HEX(a.address) = HEX(?) " +
+                                 "ORDER BY a.updated DESC LIMIT 1")) {
+                ps.setBytes(1, rawAddress);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        name = rs.getString(1);
+                    }
+                }
+            } catch (SQLException ex) {
+                logger.error("webhook: HEX fallback failed for IP {}", ipString, ex);
+            }
+        }
+        logger.info("webhook: resolved victim name for IP {} -> {}",
+                ipString, name == null ? "<not found>" : name);
         return futuresFactory.completedFuture(name);
     }
 }
