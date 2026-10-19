@@ -24,6 +24,10 @@ commands:
 
 您可以移除任何您不需要的命令别名，或者添加新的别名。这套机制对[扩展命令](zh-cn/Addons.md)也适用。
 
+### 玩家检查
+
+`/check <player>` 会显示玩家 UUID、有效的封禁和禁言，以及有效警告的数量。工作人员需要 `libertybans.check` 权限。额外授予 `libertybans.check.ip` 后，还会显示 IP 和地理位置。如果启用了 IP 隐藏，还需要 `libertybans.admin.viewips`。地理位置通过 HTTPS 服务 [ipwho.is](https://ipwho.is/) 查询，该服务会收到被查询的 IP 地址。
+
 ## 针对平台管理命令并解决冲突
 
 有些插件（如Essentials，CMI）会硬编码/ban和/kick命令，这会覆盖LibertyBans的命令并造成冲突。服务器不会在出现冲突的情况下自动使用LibertyBans的命令。

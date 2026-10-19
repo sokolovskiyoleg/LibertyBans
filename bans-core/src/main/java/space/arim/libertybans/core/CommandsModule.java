@@ -21,6 +21,7 @@ package space.arim.libertybans.core;
 
 import space.arim.injector.MultiBinding;
 import space.arim.libertybans.core.commands.AccountHistoryCommands;
+import space.arim.libertybans.core.commands.CheckCommands;
 import space.arim.libertybans.core.commands.AddonCommands;
 import space.arim.libertybans.core.commands.AddressPunishCommands;
 import space.arim.libertybans.core.commands.AddressUnpunishCommands;
@@ -78,6 +79,11 @@ public final class CommandsModule {
 	@MultiBinding
 	public SubCommandGroup accountHistoryCommands(AccountHistoryCommands accountHistoryCommands) {
 		return accountHistoryCommands;
+	}
+
+	@MultiBinding
+	public SubCommandGroup checkCommands(CheckCommands checkCommands) {
+		return checkCommands;
 	}
 
 	@MultiBinding

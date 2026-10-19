@@ -120,7 +120,8 @@ public interface MainConfig {
 		    "warns",
 		    "blame",
 		    "alts",
-			"accounthistory"
+			"accounthistory",
+			"check"
 		})
 		List<String> aliases();
 

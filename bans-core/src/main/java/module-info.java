@@ -21,6 +21,7 @@ import space.arim.libertybans.core.addon.AddonProvider;
 
 module space.arim.libertybans.core {
 	requires com.github.benmanes.caffeine;
+	requires com.google.gson;
 	requires com.zaxxer.hikari;
 	requires jakarta.inject;
 	requires static java.compiler;

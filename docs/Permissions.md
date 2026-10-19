@@ -52,8 +52,12 @@ For obvious reasons, there are no duration permissions for kicks; moreover there
 * `libertybans.list.warns` - /warns
 * `libertybans.list.blame` - /blame
 
-## Alt Management
+## Account Check
 
+* `libertybans.check` - `/check <player>`
+* `libertybans.check.ip` - show the player's IP and geolocation with `/check`; if IP censorship is enabled, `libertybans.admin.viewips` is also required
+
+## Alt Management
 * `libertybans.alts.command` - /alts command
 * `libertybans.alts.autoshow` - see a report when a player joins on a detected alt account
 * `libertybans.alts.accounthistory.list` - /accounthistory list

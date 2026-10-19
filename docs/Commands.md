@@ -24,6 +24,10 @@ commands:
 
 You can remove any aliases which you do not want, or add new ones. This system works with [addon commands](Addons.md), too.
 
+### Player check
+
+`/check <player>` shows the player's active ban and mute, and active warn count. Staff need `libertybans.check`. Grant `libertybans.check.ip` to also show the IP and geolocation. When IP censorship is enabled, `libertybans.admin.viewips` is required as well. Geolocation uses the HTTPS service at [ipwho.is](https://ipwho.is/), which receives the queried IP address.
+
 ## Deconflicting and managing commands, per platform
 
 Some plugins (like Essentials, CMI) have hardcoded /ban and /kick commands that overlap with LibertyBans and create conflicts. The server doesn't automatically select LibertyBans commands when there is a conflict.

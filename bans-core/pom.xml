@@ -944,6 +944,10 @@
 			<artifactId>arimapi-util-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>space.arim.api</groupId>
 			<artifactId>arimapi-util-testing</artifactId>
 		</dependency>

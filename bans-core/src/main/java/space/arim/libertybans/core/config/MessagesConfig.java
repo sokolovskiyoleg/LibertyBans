@@ -535,6 +535,9 @@ public interface MessagesConfig {
 	@SubSection
 	AccountHistorySection accountHistory();
 
+	@SubSection
+	CheckSection check();
+
 	interface Misc {
 		
 		@ConfKey("unknown-error")

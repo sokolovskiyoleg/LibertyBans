@@ -54,8 +54,12 @@
 * `libertybans.list.warns` - /warns
 * `libertybans.list.blame` - /blame
 
-## 小号管理
+## 玩家检查
 
+* `libertybans.check` - `/check <player>`
+* `libertybans.check.ip` - 在 `/check` 中显示玩家 IP 和地理位置；如果启用了 IP 隐藏，还需要 `libertybans.admin.viewips`
+
+## 小号管理
 * `libertybans.alts.command` - /alts 指令
 * `libertybans.alts.autoshow` - 当检测到玩家试图开小号登录时收到通知
 * `libertybans.alts.accounthistory.list` - /accounthistory 列表
