@@ -67,4 +67,12 @@ public interface UUIDManager extends UserResolver, Part {
 	 */
 	CentralisedFuture<Optional<NetworkAddress>> lookupLastAddress(UUID uuid);
 
+	/**
+	 * Looks up the most recently recorded player name using the given address.
+	 *
+	 * @param address the address
+	 * @return the most recently recorded name, if any
+	 */
+	CentralisedFuture<Optional<String>> lookupNameFromAddress(NetworkAddress address);
+
 }

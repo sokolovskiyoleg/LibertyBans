@@ -114,7 +114,7 @@ public final class StandardLocalEnforcer<@PlatformPlayer P> implements LocalEnfo
 		}
 		return arrestsAndNotices.thenCompose((ignore) -> {
 			return formatter.formatWithPunishment(
-					enforcementOptions.replaceTargetArgument(section.successNotification()),
+					enforcementOptions.replaceTargetArgument(section.successNotification(), punishment.getVictim()),
 					punishment
 			);
 		}).thenCompose((notification) -> {
@@ -143,7 +143,7 @@ public final class StandardLocalEnforcer<@PlatformPlayer P> implements LocalEnfo
 		CentralisedFuture<Component> futureNotify;
 		{
 			RemovalsSection.PunishmentRemoval section = configs.getMessagesConfig().removals().forType(punishment.getType());
-			ComponentText msg = enforcementOptions.replaceTargetArgument(section.successNotification());
+			ComponentText msg = enforcementOptions.replaceTargetArgument(section.successNotification(), punishment.getVictim());
 
 			Optional<Operator> unOperator = enforcementOptions.unOperator();
 			if (unOperator.isEmpty()) {

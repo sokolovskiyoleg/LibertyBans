@@ -20,7 +20,9 @@
 package space.arim.libertybans.core.punish;
 
 import space.arim.api.jsonchat.adventure.util.ComponentText;
+import space.arim.libertybans.api.AddressVictim;
 import space.arim.libertybans.api.Operator;
+import space.arim.libertybans.api.Victim;
 import space.arim.libertybans.api.punish.EnforcementOptions;
 import space.arim.libertybans.api.punish.EnforcementOptionsFactory;
 import space.arim.libertybans.core.punish.sync.SynchronizationProtocol;
@@ -69,6 +71,13 @@ public final class EnforcementOpts implements EnforcementOptions {
 			return notification;
 		}
 		return notification.replaceText("%TARGET%", targetArgument);
+	}
+
+	public ComponentText replaceTargetArgument(ComponentText notification, Victim victim) {
+		if (victim instanceof AddressVictim) {
+			return notification.replaceText("%TARGET%", "%VICTIM_NAME%");
+		}
+		return replaceTargetArgument(notification);
 	}
 
 	/**

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.arim.api.jsonchat.adventure.util.Adventure5Compat;
 import space.arim.api.jsonchat.adventure.util.ComponentText;
+import space.arim.libertybans.api.AddressVictim;
 import space.arim.libertybans.api.Operator;
 import space.arim.libertybans.api.event.PostOpNotificationEvent;
 import space.arim.libertybans.api.event.PostPardonEvent;
@@ -95,6 +96,9 @@ public final class PostWebhookListener {
         {
             String target = event.getTarget().orElse(null);
             jsonPayload = jsonPayload.replace("%TARGET%", target == null ? "<none>" : target);
+        }
+        if (event.getPunishment().getVictim() instanceof AddressVictim) {
+            jsonPayload = jsonPayload.replace("%VICTIM%", "%VICTIM_NAME% (%VICTIM_ADDRESS%)");
         }
         ComponentText formattable = ComponentText.create(Component.text(jsonPayload), adventure5Compat);
         CompletableFuture<Component> formatted;

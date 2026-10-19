@@ -119,4 +119,18 @@ class QueryingImpl {
 		}));
 	}
 
+	CentralisedFuture<String> resolveNameFromAddress(NetworkAddress address) {
+		return dbProvider.get().query(SQLFunction.readOnly((context) -> {
+			return context
+					.select(NAMES.NAME)
+					.from(ADDRESSES)
+					.innerJoin(NAMES)
+					.on(ADDRESSES.UUID.eq(NAMES.UUID))
+					.where(ADDRESSES.ADDRESS.eq(address))
+					.orderBy(ADDRESSES.UPDATED.desc(), NAMES.UPDATED.desc())
+					.limit(1)
+					.fetchOne(NAMES.NAME);
+		}));
+	}
+
 }

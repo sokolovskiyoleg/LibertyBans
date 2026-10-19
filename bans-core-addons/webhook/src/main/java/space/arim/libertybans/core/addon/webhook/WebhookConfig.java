@@ -69,6 +69,7 @@ public interface WebhookConfig extends AddonConfig {
                 "A Discord webhook has many potential fields, so this section lets you add whatever you want.",
                 "",
                 "Note that punishment-related variables are fully supported here, but color codes are not.",
+                "For IP-based punishments, %VICTIM% is the latest known player name and the IP address is appended.",
                 "",
                 "We HIGHLY recommend using a tool, like Discohook, to create a webhook",
                 "Steps:",
