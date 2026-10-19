@@ -38,22 +38,17 @@ import space.arim.libertybans.api.event.PostPardonEvent;
 import space.arim.libertybans.api.event.PostPunishEvent;
 import space.arim.libertybans.api.punish.Punishment;
 import space.arim.libertybans.core.config.InternalFormatter;
-import space.arim.libertybans.core.database.DatabaseManager;
 import space.arim.libertybans.core.service.FuturePoster;
+import space.arim.libertybans.core.uuid.UUIDManager;
 import space.arim.omnibus.events.ListenerPriorities;
 import space.arim.omnibus.events.ListeningMethod;
 import space.arim.omnibus.util.ThisClass;
 import space.arim.omnibus.util.concurrent.CentralisedFuture;
-import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -66,22 +61,19 @@ public final class PostWebhookListener {
     private final InternalFormatter formatter;
     private final FuturePoster futurePoster;
     private final Adventure5Compat adventure5Compat;
-    private final DatabaseManager databaseManager;
-    private final FactoryOfTheFuture futuresFactory;
+    private final UUIDManager uuidManager;
     private final HttpClient client = HttpClient.newHttpClient();
 
     private static final Logger logger = LoggerFactory.getLogger(ThisClass.get());
 
     @Inject
     public PostWebhookListener(WebhookAddon addon, InternalFormatter formatter, FuturePoster futurePoster,
-                               Adventure5Compat adventure5Compat, DatabaseManager databaseManager,
-                               FactoryOfTheFuture futuresFactory) {
+                               Adventure5Compat adventure5Compat, UUIDManager uuidManager) {
         this.addon = addon;
         this.formatter = formatter;
         this.futurePoster = futurePoster;
         this.adventure5Compat = adventure5Compat;
-        this.databaseManager = databaseManager;
-        this.futuresFactory = futuresFactory;
+        this.uuidManager = uuidManager;
     }
 
     @ListeningMethod(priority = ListenerPriorities.LOW)
@@ -125,9 +117,7 @@ public final class PostWebhookListener {
                 // because of UUIDManager's fastCache.
                 victimNameFuture = formatter.formatVictim(compositeVictim);
             } else if (victim instanceof AddressVictim addressVictim) {
-                // For IP-only bans (e.g. /ipban), the AddressVictim carries no UUID,
-                // so formatVictim has nothing to resolve. Look up the player that owns
-                // this IP in the names table instead, and use their last known name.
+                // For IP-only bans, resolve the last known name through the core lookup.
                 victimNameFuture = lookupNameByAddress(addressVictim);
             } else {
                 victimNameFuture = null;
@@ -199,62 +189,12 @@ public final class PostWebhookListener {
         }
     }
 
-    /**
-     * Resolves the most-recent player name associated with the given IP address by
-     * querying the LibertyBans {@code addresses} / {@code names} tables directly.
-     *
-     * <p>This is used to enrich {@code %VICTIM_NAME%} when the victim is an
-     * {@link AddressVictim} (e.g. an {@code /ipban}) and so has no nickname attached
-     * to the punishment itself.
-     *
-     * @return a future yielding the player name, or an empty string if no player is
-     *         associated with this address
-     */
     private CentralisedFuture<String> lookupNameByAddress(AddressVictim addressVictim) {
-        byte[] rawAddress = addressVictim.getAddress().getRawAddress();
-        String ipString = addressVictim.getAddress().toString();
-        // Diagnostic: print to System.err so we are guaranteed to see this in latest.log
-        // even if the SLF4J binding suppresses INFO from this module.
-        System.err.println("[webhook] resolving victim name for IP " + ipString
-                + " (" + rawAddress.length + " bytes)");
-        String name = null;
-        try (Connection conn = databaseManager.getInternal().getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                             "SELECT n.name FROM libertybans_addresses a " +
-                             "JOIN libertybans_names n ON n.uuid = a.uuid " +
-                             "WHERE a.address = ? " +
-                             "ORDER BY a.updated DESC LIMIT 1")) {
-            ps.setBytes(1, rawAddress);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    name = rs.getString(1);
-                }
-            }
-        } catch (SQLException ex) {
-            System.err.println("[webhook] primary lookup failed for IP " + ipString);
-            ex.printStackTrace();
-            return futuresFactory.completedFuture(null);
-        }
-        if (name == null) {
-            try (Connection conn = databaseManager.getInternal().getConnection();
-                 PreparedStatement ps = conn.prepareStatement(
-                                 "SELECT n.name FROM libertybans_addresses a " +
-                                 "JOIN libertybans_names n ON n.uuid = a.uuid " +
-                                 "WHERE HEX(a.address) = HEX(?) " +
-                                 "ORDER BY a.updated DESC LIMIT 1")) {
-                ps.setBytes(1, rawAddress);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        name = rs.getString(1);
-                    }
-                }
-            } catch (SQLException ex) {
-                System.err.println("[webhook] HEX fallback failed for IP " + ipString);
-                ex.printStackTrace();
-            }
-        }
-        System.err.println("[webhook] resolved victim name for IP " + ipString
-                + " -> " + (name == null ? "<not found>" : name));
-        return futuresFactory.completedFuture(name);
+        return uuidManager.lookupNameFromAddress(addressVictim.getAddress())
+                .thenApply(name -> name.orElse(null))
+                .exceptionally(ex -> {
+                    logger.warn("Failed to look up the name associated with address {}", addressVictim.getAddress(), ex);
+                    return null;
+                });
     }
 }
