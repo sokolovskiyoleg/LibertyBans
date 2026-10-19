@@ -52,7 +52,7 @@ module space.arim.libertybans.core {
 	exports space.arim.libertybans.core.commands.usage to space.arim.injector;
 	exports space.arim.libertybans.core.config;
 	exports space.arim.libertybans.core.config.displayid;
-	exports space.arim.libertybans.core.database to space.arim.dazzleconf, space.arim.injector;
+	exports space.arim.libertybans.core.database to space.arim.dazzleconf, space.arim.injector, space.arim.libertybans.core.addon.webhook;
 	exports space.arim.libertybans.core.database.execute to space.arim.injector;
 	exports space.arim.libertybans.core.database.flyway to org.flywaydb.core, space.arim.injector;
 	exports space.arim.libertybans.core.env;
