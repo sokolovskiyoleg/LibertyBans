@@ -21,6 +21,8 @@ package space.arim.libertybans.core.commands;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import net.kyori.adventure.text.Component;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import space.arim.libertybans.api.PlayerVictim;
 import space.arim.libertybans.api.PunishmentType;
 import space.arim.libertybans.api.Victim;
@@ -35,6 +37,9 @@ import space.arim.libertybans.core.punish.MiscUtil;
 import space.arim.libertybans.core.punish.permission.VictimTypeCheck;
 import space.arim.omnibus.util.concurrent.CentralisedFuture;
 
+import java.util.Locale;
+import java.util.stream.Stream;
+
 @Singleton
 public final class PlayerPunishCommands extends PunishCommands {
 
@@ -44,14 +49,29 @@ public final class PlayerPunishCommands extends PunishCommands {
 	public PlayerPunishCommands(Dependencies dependencies, PunishmentDrafter drafter, InternalFormatter formatter,
 								AdditionAssistant additionAssistant, TabCompletion tabCompletion,
 								EnvUserResolver envUserResolver) {
-		super(dependencies, MiscUtil.punishmentTypes().stream().map(PunishmentType::toString),
+		super(dependencies, Stream.concat(
+				MiscUtil.punishmentTypes().stream().map(PunishmentType::toString), Stream.of("tempban", "tempmute")
+		),
 				drafter, formatter, additionAssistant, tabCompletion);
 		this.envUserResolver = envUserResolver;
 	}
 
 	@Override
 	public PunishmentType parseType(String arg)  {
-		return PunishmentType.valueOf(arg);
+		return switch (arg) {
+			case "TEMPBAN" -> PunishmentType.BAN;
+			case "TEMPMUTE" -> PunishmentType.MUTE;
+			default -> PunishmentType.valueOf(arg);
+		};
+	}
+
+	@Override
+	protected @Nullable Component requiredDurationUsage(String commandName, PunishmentType type) {
+		return switch (commandName.toLowerCase(Locale.ROOT)) {
+			case "tempban" -> type == PunishmentType.BAN ? messages().additions().bans().tempBanUsage() : null;
+			case "tempmute" -> type == PunishmentType.MUTE ? messages().additions().mutes().tempMuteUsage() : null;
+			default -> null;
+		};
 	}
 
 	@Override

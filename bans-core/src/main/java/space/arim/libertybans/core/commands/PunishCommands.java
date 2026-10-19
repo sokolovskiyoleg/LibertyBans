@@ -19,6 +19,7 @@
 
 package space.arim.libertybans.core.commands;
 
+import net.kyori.adventure.text.Component;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import space.arim.libertybans.api.PunishmentType;
 import space.arim.libertybans.api.Victim;
@@ -80,14 +81,23 @@ abstract class PunishCommands extends AbstractSubCommandGroup implements PunishU
 				if (type == PunishmentType.KICK) {
 					return Duration.ZERO; // Always permanent
 				}
+				Component requiredDurationUsage = requiredDurationUsage(arg, type);
 				if (command.hasNext()) {
 					String time = command.peek();
 					Duration parsed = new DurationParser(messages().formatting().permanentArguments()).parse(time);
+					if (requiredDurationUsage != null && (parsed.isNegative() || parsed.isZero())) {
+						sender.sendMessage(requiredDurationUsage);
+						return null;
+					}
 					if (!parsed.isNegative()) {
 						// Successful parse; consume this argument
 						command.next();
 						return parsed;
 					}
+				}
+				if (requiredDurationUsage != null) {
+					sender.sendMessage(requiredDurationUsage);
+					return null;
 				}
 				// Fallback to permanent if unable to parse
 				return Duration.ZERO;
@@ -151,6 +161,10 @@ abstract class PunishCommands extends AbstractSubCommandGroup implements PunishU
 			}
 		};
 		return additionAssistant.new Execution<>(sender, command, section, client);
+	}
+
+	protected @Nullable Component requiredDurationUsage(String commandName, PunishmentType type) {
+		return null;
 	}
 
 	@Override

@@ -42,6 +42,10 @@ public interface AdditionsSection {
 		@DefaultString("&cUsage: /ban &e<player> [time] <reason>&c.")
 		Component usage();
 
+		@ConfKey("tempban-usage")
+		@DefaultString("&cUsage: /tempban &e<player> <time> <reason>&c.")
+		Component tempBanUsage();
+
 		@Override
 		@DefaultString("&c&o%TARGET%&r&7 cannot be banned.")
 		ComponentText exempted();
@@ -80,6 +84,10 @@ public interface AdditionsSection {
 		@Override
 		@DefaultString("&cUsage: /mute &e<player> [time] <reason>&c.")
 		Component usage();
+
+		@ConfKey("tempmute-usage")
+		@DefaultString("&cUsage: /tempmute &e<player> <time> <reason>&c.")
+		Component tempMuteUsage();
 
 		@Override
 		@DefaultString("&c&o%TARGET%&r&7 cannot be muted.")
