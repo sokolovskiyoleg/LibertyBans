@@ -31,6 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import space.arim.api.jsonchat.adventure.util.Adventure5Compat;
 import space.arim.api.jsonchat.adventure.util.ComponentText;
+import space.arim.libertybans.api.AddressVictim;
 import space.arim.libertybans.api.Operator;
 import space.arim.libertybans.api.PlayerOperator;
 import space.arim.libertybans.api.PlayerVictim;
@@ -386,6 +387,9 @@ public class FormatterTest {
 		if (victim instanceof PlayerVictim) {
 			when(uuidManager.lookupName(((PlayerVictim) victim).getUUID()))
 					.thenReturn(completedFuture(Optional.of(displayableVictim.name())));
+		} else if (victim instanceof AddressVictim addressVictim) {
+			when(uuidManager.lookupNameFromAddress(addressVictim.getAddress()))
+					.thenReturn(completedFuture(Optional.empty()));
 		}
 	}
 

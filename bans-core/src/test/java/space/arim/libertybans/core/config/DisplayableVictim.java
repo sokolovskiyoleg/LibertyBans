@@ -57,7 +57,7 @@ final class DisplayableVictim {
 			return "ObsidianWolf_";
 		}
 		assert this == Address_198_27_31_42;
-		return "198.27.31.42";
+		return "-NameUnknown-";
 	}
 
 	public String displayId() {
@@ -65,7 +65,7 @@ final class DisplayableVictim {
 			return ((PlayerVictim) victim).getUUID().toString().replace("-", "");
 		}
 		assert this == Address_198_27_31_42;
-		return "198.27.31.42";
+		return "-NameUnknown-";
 	}
 
 	private static DisplayableVictim player(UUID uuid, String name) {
