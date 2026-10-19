@@ -139,11 +139,17 @@ public class Formatter implements InternalFormatter {
 
 	private CentralisedFuture<Component> formatWithPunishment(
 			ComponentText componentText, Punishment punishment, @Nullable Operator unOperator, @Nullable Boolean silence) {
+		if (punishment.getVictim() instanceof AddressVictim) {
+			componentText = componentText
+					.replaceText("%VICTIM%", "%VICTIM_NAME%")
+					.replaceText("%VICTIM_ID%", "%VICTIM_NAME%");
+		}
+		ComponentText textToFormat = componentText;
 		Formatting formatting = new Formatting(punishment, unOperator, silence);
-		formatting.requestFutureVars(componentText);
+		formatting.requestFutureVars(textToFormat);
 		return futuresFactory.supplyAsync(() -> {
 			formatting.computeRemaining();
-			return formatting.replaceInMessage(componentText);
+			return formatting.replaceInMessage(textToFormat);
 		}).thenCompose(future -> future);
 	}
 	
@@ -187,6 +193,8 @@ public class Formatter implements InternalFormatter {
 	
 	private enum FutureReplaceable {
 		VICTIM,
+		VICTIM_NAME,
+		VICTIM_ADDRESS,
 		OPERATOR,
 		UNOPERATOR;
 
@@ -348,6 +356,8 @@ public class Formatter implements InternalFormatter {
 			Operator unOperator) {
 		return switch (futureReplaceable) {
 			case VICTIM -> formatVictim(punishment.getVictim());
+			case VICTIM_NAME -> formatVictimName(punishment.getVictim());
+			case VICTIM_ADDRESS -> formatVictimAddress(punishment.getVictim());
 			case OPERATOR -> formatOperator(punishment.getOperator());
 			case UNOPERATOR -> formatOperator(unOperator);
 		};
@@ -389,6 +399,16 @@ public class Formatter implements InternalFormatter {
 				));
 	}
 
+	private CentralisedFuture<String> formatVictimName(Victim victim) {
+		if (victim instanceof AddressVictim addressVictim) {
+			return uuidManager.lookupNameFromAddress(addressVictim.getAddress())
+					.thenApply((optName) -> optName.orElse(
+							messages().formatting().victimDisplay().playerNameUnknown()
+					));
+		}
+		return formatVictim(victim);
+	}
+
 	private String formatOperatorId(Operator operator) {
 		if (operator instanceof PlayerOperator playerOperator) {
 			return UUIDUtil.toShortString(playerOperator.getUUID());
@@ -413,6 +433,17 @@ public class Formatter implements InternalFormatter {
 
 	private String formatAddressVictim(AddressVictim addressVictim) {
 		return addressVictim.getAddress().toString();
+	}
+
+	private CentralisedFuture<String> formatVictimAddress(Victim victim) {
+		if (victim instanceof AddressVictim addressVictim) {
+			return futuresFactory.completedFuture(formatAddressVictim(addressVictim));
+		}
+		if (victim instanceof CompositeVictim compositeVictim &&
+				!CompositeVictim.WILDCARD_ADDRESS.equals(compositeVictim.getAddress())) {
+			return futuresFactory.completedFuture(compositeVictim.getAddress().toString());
+		}
+		return futuresFactory.completedFuture("");
 	}
 
 	/** Visible for testing */

@@ -180,7 +180,7 @@ public final class AdditionAssistant {
 		private CentralisedFuture<Void> enforceAndSendSuccess(Punishment punishment, String targetArg,
 															  NotificationMessage notificationMessage) {
 			boolean silent = notificationMessage.isSilent();
-			EnforcementOptions enforcementOptions = EnforcementOpts
+			EnforcementOpts enforcementOptions = EnforcementOpts
 					.builder()
 					.enforcement(EnforcementOptions.Enforcement.GLOBAL)
 					.broadcasting(silent ?
@@ -192,7 +192,7 @@ public final class AdditionAssistant {
 					.enforcePunishment(enforcementOptions)
 					.toCompletableFuture();
 			CentralisedFuture<Component> futureMessage = formatter.formatWithPunishment(
-					section.successMessage().replaceText("%TARGET%", targetArg), punishment);
+					enforcementOptions.replaceTargetArgument(section.successMessage(), punishment.getVictim()), punishment);
 
 			return futuresFactory.allOf(enforcement, futureMessage).thenCompose((ignore) -> {
 				return fireEventWithTimeout.fire(new PostPunishEventImpl(punishment, targetArg, silent));

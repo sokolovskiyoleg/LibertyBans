@@ -239,4 +239,9 @@ public final class CachingUUIDManager implements UUIDManager {
 		});
 	}
 
+	@Override
+	public CentralisedFuture<Optional<String>> lookupNameFromAddress(NetworkAddress address) {
+		return queryingImpl.resolveNameFromAddress(address).thenApply(Optional::ofNullable);
+	}
+
 }

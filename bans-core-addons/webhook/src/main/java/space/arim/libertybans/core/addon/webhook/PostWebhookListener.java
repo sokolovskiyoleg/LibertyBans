@@ -137,6 +137,9 @@ public final class PostWebhookListener {
             }
         }
         jsonPayload = jsonPayload.replace("%VICTIM_NAME%", victimName == null ? "" : victimName);
+        if (event.getPunishment().getVictim() instanceof AddressVictim) {
+            jsonPayload = jsonPayload.replace("%VICTIM%", "%VICTIM_NAME% (%VICTIM_ADDRESS%)");
+        }
         ComponentText formattable = ComponentText.create(Component.text(jsonPayload), adventure5Compat);
         CompletableFuture<Component> formatted;
         {
