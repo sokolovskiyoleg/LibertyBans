@@ -20,6 +20,9 @@
 package space.arim.libertybans.core.alts;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -173,5 +176,53 @@ public class AltCheckFormatterTest {
 						kind: STRICT, username: Muted(Misbehaver)
 						kind: NORMAL, username: None(Saint)""",
 				PlainComponentSerializer.plain().serialize(formattedMessage));
+	}
+
+	@Test
+	public void formatAutoShowGroupsByAddress() throws UnknownHostException {
+		Instant date = Instant.parse("2021-07-23T02:15:23.000000Z");
+		String sharedAddress = "207.144.101.102";
+		String otherAddress = "192.0.2.1";
+		var nameDisplay = mock(AltsSection.Formatting.NameDisplay.class);
+		when(nameDisplay.notPunished()).thenReturn(ComponentText.create(Component.text("%USERNAME%"), Adventure5Compat.DEFAULT));
+		when(conf.nameDisplay()).thenReturn(nameDisplay);
+		when(conf.normal()).thenReturn(Component.text("↓"));
+		when(conf.strict()).thenReturn(Component.text("↑"));
+		when(formatter.prefix(any())).thenAnswer(invocation -> invocation.getArgument(0));
+		when(formatter.formatAbsoluteDate(date)).thenReturn("date");
+
+		AltsSection.AutoShow autoShow = mock(AltsSection.AutoShow.class);
+		when(autoShow.header()).thenReturn(ComponentText.create(Component.text("Alts for %TARGET%"), Adventure5Compat.DEFAULT));
+		when(autoShow.separator()).thenReturn(Component.newline().append(Component.text("  ")));
+		when(autoShow.footer()).thenReturn(ComponentText.create(Component.empty(), Adventure5Compat.DEFAULT));
+		when(autoShow.copyHint()).thenReturn(ComponentText.create(Component.text("Click to copy"), Adventure5Compat.DEFAULT));
+		when(autoShow.layout()).thenReturn(ComponentText.create(
+				Component.text("%RELEVANT_USER% %DATE_RECORDED% %DETECTION_KIND%"), Adventure5Compat.DEFAULT));
+
+		List<DetectedAlt> alts = List.of(
+				new DetectedAlt(UUID.randomUUID(), "First", NetworkAddress.of(InetAddress.getByName(sharedAddress)), date, DetectionKind.NORMAL),
+				new DetectedAlt(UUID.randomUUID(), "Second", NetworkAddress.of(InetAddress.getByName(sharedAddress)), date, DetectionKind.STRICT),
+				new DetectedAlt(UUID.randomUUID(), "Third", NetworkAddress.of(InetAddress.getByName(otherAddress)), date, DetectionKind.NORMAL)
+		);
+		var response = new KeysetPage<>(alts, KeysetAnchor.unset(), KeysetAnchor.unset(), InstantThenUUID.borderValueHandle());
+
+		Component message = altCheckFormatter.formatAutoShowMessage(autoShow, response, "MainUser");
+		assertEquals("Alts for MainUser\n" + sharedAddress + ":\n  First date ↓\n  Second date ↑\n" +
+				otherAddress + ":\n  Third date ↓", PlainComponentSerializer.plain().serialize(message));
+		Component addressComponent = message.children().stream()
+				.filter(child -> child instanceof TextComponent text && text.content().equals(sharedAddress + ":"))
+				.findFirst().orElseThrow();
+		assertEquals(ClickEvent.copyToClipboard(sharedAddress), addressComponent.style().clickEvent());
+		Component usernameComponent = findTextComponent(message, "First");
+		assertEquals(ClickEvent.copyToClipboard("First"), usernameComponent.style().clickEvent());
+		assertEquals(HoverEvent.showText(Component.text("Click to copy")), usernameComponent.style().hoverEvent());
+	}
+
+	private static Component findTextComponent(Component component, String content) {
+		if (component instanceof TextComponent text && text.content().equals(content)) {
+			return component;
+		}
+		return component.children().stream().map(child -> findTextComponent(child, content))
+				.filter(found -> found != null).findFirst().orElse(null);
 	}
 }

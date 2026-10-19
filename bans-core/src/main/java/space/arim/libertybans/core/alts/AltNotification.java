@@ -54,8 +54,8 @@ public class AltNotification {
 		if (response.data().isEmpty()) {
 			return futuresFactory.completedFuture(null);
 		}
-		Component notification = altCheckFormatter.formatMessage(
-				configs.getMessagesConfig().alts().autoShow(), response, name, -1
+		Component notification = altCheckFormatter.formatAutoShowMessage(
+				configs.getMessagesConfig().alts().autoShow(), response, name
 		);
 		return envEnforcer.sendToThoseWithPermission("libertybans.alts.autoshow", notification);
 	}

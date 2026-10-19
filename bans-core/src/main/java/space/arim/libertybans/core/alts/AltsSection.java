@@ -100,10 +100,19 @@ public interface AltsSection {
 		@Override
 		@ConfComments("The message to display atop the alt check. Set to an empty string to disable")
 		@ConfDefault.DefaultStrings({
-				"&c&o%TARGET%&7 may be an alt account. Some of the accounts they're linked to are listed below.",
-				"&7Strong possibility - Same address as other player.",
-				"&7Mere possibility - Linked to other player by common past address"})
+				"&7Linked accounts for &c&o%TARGET%&7:",
+				"&8↑ same IP, ↓ shared past IP"})
 		ComponentText header();
+
+		@ConfKey("layout")
+		@ConfComments("How to display each account within a shared-IP group")
+		@ConfDefault.DefaultString("%RELEVANT_USER% &7%DATE_RECORDED% - %DETECTION_KIND%")
+		ComponentText layout();
+
+		@ConfKey("copy-hint")
+		@ConfComments("Tooltip shown when hovering over a clickable IP or nickname")
+		@ConfDefault.DefaultString("&7Click to copy")
+		ComponentText copyHint();
 
 		@ConfKey("oldest-first")
 		@ConfComments("Whether to sort by oldest detections first")
@@ -118,7 +127,7 @@ public interface AltsSection {
 
 		@Override
 		@ConfComments("The separator between list entries")
-		@ConfDefault.DefaultString(", ")
+		@ConfDefault.DefaultString("\n  ")
 		Component separator();
 
 		@Override
